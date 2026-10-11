@@ -157,6 +157,25 @@ jobs:
           echo "=== Licenças do SDK ==="
           ls -la "$ANDROID_HOME/licenses" 2>/dev/null || true
           
+
+      - name: Preparar caminho do sdkmanager para Buildozer
+        run: |
+          SDK="$HOME/.buildozer/android/platform/android-sdk"
+          SDKMANAGER="$(find "$SDK" "$ANDROID_HOME" \
+            -type f -name sdkmanager 2>/dev/null | head -n 1)"
+
+          if [ -z "$SDKMANAGER" ]; then
+            echo "ERRO: sdkmanager não encontrado"
+            exit 1
+          fi
+
+          mkdir -p "$SDK/tools/bin"
+          ln -sf "$SDKMANAGER" "$SDK/tools/bin/sdkmanager"
+
+          echo "sdkmanager encontrado em: $SDKMANAGER"
+          "$SDK/tools/bin/sdkmanager" --version
+          
+      
       - name: Criar APK
         run: buildozer -v android debug
 
