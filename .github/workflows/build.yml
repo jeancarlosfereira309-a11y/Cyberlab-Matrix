@@ -68,6 +68,29 @@ jobs:
             "build-tools;35.0.0" \
             "cmdline-tools;latest"
       
+      - name: Localizar e configurar AIDL
+        run: |
+          echo "Procurando AIDL..."
+          find "$ANDROID_HOME/build-tools" -type f -name aidl
+
+          AIDL_PATH=$(find "$ANDROID_HOME/build-tools" \
+            -type f -name aidl | sort -V | tail -n 1)
+
+          if [ -z "$AIDL_PATH" ]; then
+            echo "AIDL não encontrado. Instalando Build Tools..."
+            sdkmanager --install "build-tools;35.0.0"
+            AIDL_PATH=$(find "$ANDROID_HOME/build-tools" \
+              -type f -name aidl | sort -V | tail -n 1)
+          fi
+
+          if [ -z "$AIDL_PATH" ]; then
+            echo "ERRO: AIDL não foi instalado."
+            exit 1
+          fi
+
+          echo "AIDL encontrado: $AIDL_PATH"
+          echo "$(dirname "$AIDL_PATH")" >> "$GITHUB_PATH"
+          
       
       - name: Verificar Android SDK
         run: |
