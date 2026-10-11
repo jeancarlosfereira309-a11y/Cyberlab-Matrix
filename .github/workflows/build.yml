@@ -1,10 +1,11 @@
 
 name: Build CyberLab Matrix APK
 
-on:
-workflow_dispatch:
-push:
-branches: [principal]
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - principal
 
 jobs:
 build:
