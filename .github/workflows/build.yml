@@ -174,11 +174,28 @@ jobs:
 
           echo "sdkmanager encontrado em: $SDKMANAGER"
           "$SDK/tools/bin/sdkmanager" --version
-          
+          - name: Configurar SDK para Buildozer
+  run: |
+    SDK_TARGET="$HOME/.buildozer/android/platform/android-sdk"
+    SDK_SOURCE="$HOME/android-sdk"
+    
+    # Create parent directory
+    mkdir -p "$(dirname "$SDK_TARGET")"
+    
+    # Remove if exists and create symlink
+    rm -rf "$SDK_TARGET"
+    ln -s "$SDK_SOURCE" "$SDK_TARGET"
+    
+    # Verify the structure
+    ls -la "$SDK_TARGET/cmdline-tools/latest/bin/sdkmanager"
+    ls -la "$SDK_TARGET/build-tools/"
+    ls -la "$SDK_TARGET/platforms/"
       
       - name: Criar APK
-        run: buildozer -v android debug
-
+  env:
+    ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+    ANDROID_NDK_VERSION: "28c"
+  run: buildozer -v android debug
 
       - name: Enviar APK
         if: success()
