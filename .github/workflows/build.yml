@@ -25,12 +25,12 @@ jobs:
             python3-pip autoconf libtool pkg-config \
             zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
 
-      - name: Install Buildozer
+      
+      - name: Build APK
+        env:
+          BUILDOZER_WARN_ON_ROOT: "0"
         run: |
-          python -m pip install buildozer cython
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      .github/workflows/build.yml
+          yes | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
