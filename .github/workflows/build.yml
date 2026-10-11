@@ -65,14 +65,22 @@ jobs:
         run: |
           yes | sdkmanager --licenses 
 
+      
       - name: Instalar ferramentas Android
         run: |
-          sdkmanager --install \
+          SDK="$HOME/.buildozer/android/platform/android-sdk"
+          mkdir -p "$SDK"
+
+          yes | sdkmanager --sdk_root="$SDK" --licenses
+
+          sdkmanager --sdk_root="$SDK" --install \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0"
 
-          yes | sdkmanager --licenses
+          echo "SDK preparado em $SDK"
+          find "$SDK/build-tools" -type f -name aidl
+
 
       - name: Verificar AIDL
         run: |
