@@ -66,20 +66,37 @@ jobs:
           yes | sdkmanager --licenses 
 
       
+      
       - name: Instalar ferramentas Android
         run: |
           SDK="$HOME/.buildozer/android/platform/android-sdk"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" \
+            -type f -name sdkmanager | sort -V | tail -n 1)"
+
+          if [ -z "$SDKMANAGER" ]; then
+            echo "ERRO: sdkmanager não encontrado"
+            exit 1
+          fi
+
           mkdir -p "$SDK"
+          echo "SDKMANAGER=$SDKMANAGER"
+          echo "SDK=$SDK"
 
-          yes | sdkmanager --sdk_root="$SDK" --licenses
+          yes | "$SDKMANAGER" --sdk_root="$SDK" --licenses
 
-          sdkmanager --sdk_root="$SDK" --install \
+          "$SDKMANAGER" --sdk_root="$SDK" --install \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0"
 
-          echo "SDK preparado em $SDK"
+          echo "=== AIDL instalado ==="
           find "$SDK/build-tools" -type f -name aidl
+
+          if ! find "$SDK/build-tools" -type f -name aidl | grep -q .; then
+            echo "ERRO: AIDL não foi encontrado"
+            exit 1
+          fi
+          
 
 
       - name: Verificar AIDL
