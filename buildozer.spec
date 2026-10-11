@@ -9,10 +9,9 @@ version = 1.0
 requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
-android.api = 35
+android.api = 36
 android.minapi = 24
 p4a.branch = develop
-android.api = 36
 
 [buildozer]
 log_level = 2
