@@ -28,15 +28,17 @@ jobs:
             zlib1g-dev libncurses-dev cmake \
             libffi-dev libssl-dev
 
-      - name: Instalar Buildozer
+      
+            - name: Instalar Buildozer
         run: |
           python -m pip install --user --upgrade buildozer cython
           echo "$(python -m site --user-base)/bin" >> "$GITHUB_PATH"
           "$(python -m site --user-base)/bin/buildozer" --version
 
-      - name: Compilar APK
+          - name: Compilar APK
         run: |
-          yes | buildozer android debug
+          buildozer android clean
+          buildozer -v android debug
 
       - name: Publicar APK
         uses: actions/upload-artifact@v4
