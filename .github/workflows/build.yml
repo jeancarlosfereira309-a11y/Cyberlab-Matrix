@@ -30,8 +30,7 @@ jobs:
           python -m pip install buildozer cython
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Build APK
-        run: buildozer android debug
+      .github/workflows/build.yml
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
